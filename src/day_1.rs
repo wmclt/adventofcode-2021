@@ -27,7 +27,7 @@ fn count_increases(numbers: &mut Vec<i32>) -> u32 {
 
     while let Some(nbr) = numbers.pop() {
         if nbr < prev_nbr {
-            nr_increases = nr_increases + 1;
+            nr_increases += 1;
         }
         prev_nbr = nbr;
     }
@@ -37,11 +37,9 @@ fn count_increases(numbers: &mut Vec<i32>) -> u32 {
 fn load_numbers(filename: &str) -> Vec<i32> {
     let mut numbers = Vec::new();
     if let Ok(lines) = crate::util::read_lines(filename) {
-        for line in lines {
-            if let Ok(result) = line {
-                let i_result: i32 = result.parse().expect("Failed to parse int!");
-                numbers.push(i_result);
-            }
+        for line in lines.flatten() {
+            let i_result: i32 = line.parse().expect("Failed to parse int!");
+            numbers.push(i_result);
         }
     }
     numbers
@@ -75,4 +73,4 @@ mod tests {
         let numbers = vec![1, 2, 3, 4, 6, 4, 4, 4];
         assert_eq!(count_increases(&mut sum_windows(numbers)), 3);
     }
-} 
+}
