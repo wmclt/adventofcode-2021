@@ -1,14 +1,16 @@
 use std::vec::Vec;
 
+use crate::util::read_data;
+
 pub fn part_1() -> u32 {
     let file_path = "./data/day_1.txt";
-    let mut numbers = load_numbers(file_path);
+    let mut numbers = read_data(file_path, parse_i32);
     count_increases(&mut numbers)
 }
 
 pub fn part_2() -> u32 {
     let file_path = "./data/day_1.txt";
-    let numbers = load_numbers(file_path);
+    let numbers = read_data(file_path, parse_i32);
     let mut window_numbers = sum_windows(numbers);
     count_increases(&mut window_numbers)
 }
@@ -34,15 +36,8 @@ fn count_increases(numbers: &mut Vec<i32>) -> u32 {
     nr_increases
 }
 
-fn load_numbers(filename: &str) -> Vec<i32> {
-    let mut numbers = Vec::new();
-    if let Ok(lines) = crate::util::read_lines(filename) {
-        for line in lines.flatten() {
-            let i_result: i32 = line.parse().expect("Failed to parse int!");
-            numbers.push(i_result);
-        }
-    }
-    numbers
+fn parse_i32(line: String) -> i32 {
+    line.parse().expect("Failed to parse int!")
 }
 
 #[cfg(test)]

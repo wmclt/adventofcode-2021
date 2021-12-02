@@ -1,16 +1,16 @@
 use std::{str::FromStr, vec::Vec};
 
-use crate::util::load;
+use crate::util::read_data;
 
 pub fn part_1() -> i32 {
     let file_path = "./data/day_2.txt";
-    let instructions = load(file_path, line_to_movement);
+    let instructions = read_data(file_path, line_to_movement);
     count(instructions)
 }
 
 pub fn part_2() -> i32 {
     let file_path = "./data/day_2.txt";
-    let instructions : Vec<(String, i32)>= load(file_path, line_to_movement);
+    let instructions = read_data(file_path, line_to_movement);
     count_with_aim(instructions)
 }
 

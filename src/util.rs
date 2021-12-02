@@ -10,7 +10,7 @@ where
     Ok(io::BufReader::new(file).lines())
 }
 
-pub fn load<T, F>(filename: &str, test: F) -> Vec<T>
+pub fn read_data<T, F>(filename: &str, test: F) -> Vec<T>
 where
     F: Fn(String) -> T,
 {
