@@ -1,4 +1,4 @@
-use std::{vec::Vec, str::FromStr};
+use std::{str::FromStr, vec::Vec};
 
 pub fn part_1() -> i32 {
     let file_path = "./data/day_2.txt";
@@ -22,28 +22,34 @@ pub fn part_2() -> u32 {
 //     window_sums
 // }
 
-fn count(movements: Vec<(String, u16)>) -> i32 {
-    let mut horizontal = 0;
-    let mut vertical = 0;
+fn count(movements: Vec<(String, i32)>) -> i32 {
+    let mut horizontal:i32 = 0;
+    let mut vertical:i32 = 0;
 
     for (dir, nbr) in movements {
         match dir.as_str() {
-            "forward" => { horizontal += nbr; }
-            "down" => { vertical += nbr;}
-            "up" => { vertical -= nbr;}
+            "forward" => {
+                horizontal += nbr;
+            }
+            "down" => {
+                vertical += nbr;
+            }
+            "up" => {
+                vertical -= nbr;
+            }
             _ => {}
         }
     }
-    
+
     (horizontal * vertical).into()
 }
 
-fn load_instructions(filename: &str) -> Vec<(String, u16)> {
-    let mut direction_moves: Vec<(String, u16)> = Vec::new();
+fn load_instructions(filename: &str) -> Vec<(String, i32)> {
+    let mut direction_moves: Vec<(String, i32)> = Vec::new();
     if let Ok(lines) = crate::util::read_lines(filename) {
         for line in lines.flatten() {
             let mut split_string: Vec<&str> = line.split(" ").collect();
-            let nbr:u16 = FromStr::from_str(split_string.pop().unwrap()).unwrap();
+            let nbr: i32 = FromStr::from_str(split_string.pop().unwrap()).unwrap();
             let direction = split_string.pop().unwrap().to_string();
             direction_moves.push((direction, nbr));
         }
@@ -54,13 +60,19 @@ fn load_instructions(filename: &str) -> Vec<(String, u16)> {
 #[cfg(test)]
 mod tests {
 
-    // use crate::day_1::{count_increases, sum_windows};
+    use crate::day_2::count;
 
-    // #[test]
-    // fn test_part_1() {
-    //     let mut numbers = vec![1, 2, 3, 4, 3];
-    //     assert_eq!(count_increases(&mut numbers), 3);
-    // }
+    #[test]
+    fn test_part_1() {
+        let movements = vec![
+            ("forward".to_string(), 5),
+            ("down".to_string(), 5),
+            ("forward".to_string(), 5),
+            ("up".to_string(), 2),
+            ("down".to_string(), 6),
+        ];
+        assert_eq!(count(movements), 90);
+    }
 
     // #[test]
     // fn other_test_part_1() {
