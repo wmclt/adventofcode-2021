@@ -1,14 +1,16 @@
 use std::{str::FromStr, vec::Vec};
 
+use crate::util::load;
+
 pub fn part_1() -> i32 {
     let file_path = "./data/day_2.txt";
-    let instructions = load_instructions(file_path);
+    let instructions = load(file_path, line_to_movement);
     count(instructions)
 }
 
 pub fn part_2() -> i32 {
     let file_path = "./data/day_2.txt";
-    let instructions = load_instructions(file_path);
+    let instructions : Vec<(String, i32)>= load(file_path, line_to_movement);
     count_with_aim(instructions)
 }
 
@@ -58,22 +60,11 @@ fn count_with_aim(movements: Vec<(String, i32)>) -> i32 {
     horizontal * depth
 }
 
-fn load_instructions(filename: &str) -> Vec<(String, i32)> {
-    let mut direction_moves: Vec<(String, i32)> = Vec::new();
-    if let Ok(lines) = crate::util::read_lines(filename) {
-        for line in lines.flatten() {
-            let (nbr, direction) = line_to_movement(line);
-            direction_moves.push((direction, nbr));
-        }
-    }
-    direction_moves
-}
-
-fn line_to_movement(line: String) -> (i32, String) {
+fn line_to_movement(line: String) -> (String, i32) {
     let mut split_string: Vec<&str> = line.split(' ').collect();
     let nbr: i32 = FromStr::from_str(split_string.pop().unwrap()).unwrap();
     let direction = split_string.pop().unwrap().to_string();
-    (nbr, direction)
+    (direction, nbr)
 }
 
 #[cfg(test)]
