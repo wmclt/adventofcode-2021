@@ -37,9 +37,6 @@ fn calc_co2(mut char_matrix: Vec<Vec<char>>) -> u32 {
         let filter_char = find_least_frequent(&char_matrix, index);
         char_matrix = only_keep_with_char_at(char_matrix, filter_char, index);
         index += 1;
-        if index > 4 {
-            println!("{:?} {}", char_matrix, index);
-        }
     }
     binary_chars_to_decimal(&char_matrix.get(0).unwrap()[0..])
 }
@@ -122,8 +119,6 @@ fn count(movements: Vec<Vec<char>>) -> u32 {
             least_commons.push(0);
         }
     }
-
-    // println!("{:?}\n {:?}", most_commons, least_commons);
 
     binary_to_decimal(most_commons) * binary_to_decimal(least_commons)
 }
