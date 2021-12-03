@@ -43,26 +43,30 @@ fn calc_co2(mut char_matrix: Vec<Vec<char>>) -> u32 {
 
 // oxygen -> if equal, return 1
 fn find_most_frequent(char_matrix: &[Vec<char>], index: usize) -> char {
-    let (nbr_of_zeroes, nbr_of_ones) = calc_ones_and_zeroes(char_matrix, index);
-    if nbr_of_zeroes > nbr_of_ones {
-        '0'
-    } else {
-        '1'
+    match calc_ones_and_zeroes(char_matrix, index) {
+        (0, _) => '1',
+        (_, 0) => '0',
+        (nbr_of_zeroes, nbr_of_ones) => {
+            if nbr_of_zeroes > nbr_of_ones {
+                '0'
+            } else {
+                '1'
+            }
+        }
     }
 }
 // co2 -> if equal, return 0
 fn find_least_frequent(char_matrix: &[Vec<char>], index: usize) -> char {
-    let (nbr_of_zeroes, nbr_of_ones) = calc_ones_and_zeroes(char_matrix, index);
-    if nbr_of_zeroes == 0 {
-        return '1';
-    }
-    if nbr_of_ones == 0 {
-        return '0';
-    }
-    if nbr_of_zeroes <= nbr_of_ones {
-        '0'
-    } else {
-        '1'
+    match calc_ones_and_zeroes(char_matrix, index) {
+        (0, _) => '1',
+        (_, 0) => '0',
+        (nbr_of_zeroes, nbr_of_ones) => {
+            if nbr_of_zeroes <= nbr_of_ones {
+                '0'
+            } else {
+                '1'
+            }
+        }
     }
 }
 
