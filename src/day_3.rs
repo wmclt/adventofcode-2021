@@ -21,7 +21,7 @@ pub fn part_2() -> u32 {
     oxygen * co2
 }
 
-fn calc_oxygen(mut char_matrix: Vec<Vec<String>>) -> u32 {
+fn calc_oxygen(mut char_matrix: Vec<Vec<char>>) -> u32 {
     let mut index = 0;
     while char_matrix.len() > 1 {
         let filter_char = find_most_frequent(&char_matrix, index);
@@ -31,7 +31,7 @@ fn calc_oxygen(mut char_matrix: Vec<Vec<String>>) -> u32 {
     binary_chars_to_decimal(&char_matrix.get(0).unwrap()[0..])
 }
 
-fn calc_co2(mut char_matrix: Vec<Vec<String>>) -> u32 {
+fn calc_co2(mut char_matrix: Vec<Vec<char>>) -> u32 {
     let mut index = 0;
     while char_matrix.len() > 1 {
         let filter_char = find_least_frequent(&char_matrix, index);
@@ -42,50 +42,50 @@ fn calc_co2(mut char_matrix: Vec<Vec<String>>) -> u32 {
 }
 
 // oxygen -> if equal, return 1
-fn find_most_frequent(char_matrix: &[Vec<String>], index: usize) -> String {
+fn find_most_frequent(char_matrix: &[Vec<char>], index: usize) -> char {
     let (nbr_of_zeroes, nbr_of_ones) = calc_ones_and_zeroes(char_matrix, index);
     if nbr_of_zeroes > nbr_of_ones {
-        String::from('0')
+        '0'
     } else {
-        String::from('1')
+        '1'
     }
 }
 // co2 -> if equal, return 0
-fn find_least_frequent(char_matrix: &[Vec<String>], index: usize) -> String {
+fn find_least_frequent(char_matrix: &[Vec<char>], index: usize) -> char {
     let (nbr_of_zeroes, nbr_of_ones) = calc_ones_and_zeroes(char_matrix, index);
     if nbr_of_zeroes == 0 {
-        return String::from("1");
-    } 
+        return '1';
+    }
     if nbr_of_ones == 0 {
-        return String::from("0");
+        return '0';
     }
     if nbr_of_zeroes <= nbr_of_ones {
-        String::from("0")
+        '0'
     } else {
-        String::from("1")
+        '1'
     }
 }
 
-fn calc_ones_and_zeroes(char_matrix: &[Vec<String>], index: usize) -> (usize, usize) {
+fn calc_ones_and_zeroes(char_matrix: &[Vec<char>], index: usize) -> (usize, usize) {
     let nbr_of_zeroes = char_matrix
         .iter()
-        .filter(|row| row.get(index).unwrap() == &String::from('0'))
+        .filter(|row| row.get(index).unwrap() == &'0')
         .count();
     let nbr_of_ones = char_matrix
         .iter()
-        .filter(|row| row.get(index).unwrap() == &String::from('1'))
+        .filter(|row| row.get(index).unwrap() == &'1')
         .count();
     (nbr_of_zeroes, nbr_of_ones)
 }
 
-fn only_keep_with_char_at(char_matrix: Vec<Vec<String>>, ch: String, index: usize) -> Vec<Vec<String>> {
+fn only_keep_with_char_at(char_matrix: Vec<Vec<char>>, ch: char, index: usize) -> Vec<Vec<char>> {
     char_matrix
         .into_iter()
         .filter(|row| row.get(index).unwrap() == &ch)
         .collect()
 }
 
-fn count(movements: Vec<Vec<String>>) -> u32 {
+fn count(movements: Vec<Vec<char>>) -> u32 {
     let mut nbr_of_0s: Vec<u32> = Vec::new();
     let mut nbr_of_1s: Vec<u32> = Vec::new();
 
@@ -96,11 +96,11 @@ fn count(movements: Vec<Vec<String>>) -> u32 {
 
     for row in movements {
         for (col, chr) in row.iter().enumerate() {
-            match chr.as_str() {
-                "0" => {
+            match chr {
+                '0' => {
                     *nbr_of_0s.get_mut(col).unwrap() += 1;
                 }
-                "1" => {
+                '1' => {
                     *nbr_of_1s.get_mut(col).unwrap() += 1;
                 }
                 _ => {}
@@ -112,53 +112,51 @@ fn count(movements: Vec<Vec<String>>) -> u32 {
     let mut least_commons = Vec::new();
     for idx in 0..nbr_of_0s.len() {
         if nbr_of_0s.get(idx).unwrap() > nbr_of_1s.get(idx).unwrap() {
-            most_commons.push(String::from("0"));
-            least_commons.push(String::from("1"));
+            most_commons.push('0');
+            least_commons.push('1');
         } else {
-            most_commons.push(String::from("1"));
-            least_commons.push(String::from("0"));
+            most_commons.push('1');
+            least_commons.push('0');
         }
     }
 
     binary_to_decimal(&most_commons) * binary_to_decimal(&least_commons)
 }
 
-fn binary_chars_to_decimal(chars: &[String]) -> u32 {
+fn binary_chars_to_decimal(chars: &[char]) -> u32 {
     binary_to_decimal(chars)
 }
 
-fn binary_to_decimal(chars: &[String]) -> u32 {
-
-
-    u32::from_str_radix(&Vec::from(chars).join(""),2).unwrap()
-
-    // let mut result = 0;
-
-    // let base: u32 = 2;
-    // for (radix, nbr) in chars.iter().rev().enumerate() {
-    //     result += nbr * base.pow(radix as u32);
-    // }
-
-    // result
+fn binary_to_decimal(chars: &[char]) -> u32 {
+    u32::from_str_radix(
+        chars
+            .iter()
+            .map(|c| c.to_string())
+            .collect::<Vec<String>>()
+            .join("")
+            .as_str(),
+        2,
+    )
+    .unwrap()
 }
 
-fn line_to_chars(line: String) -> Vec<String> {
-    line.chars().map(|c|c.to_string()).collect()
+fn line_to_chars(line: String) -> Vec<char> {
+    line.chars().collect()
 }
 
 #[cfg(test)]
 mod tests {
 
-    use crate::day_3::{count, calc_oxygen, calc_co2};
+    use crate::day_3::{calc_co2, calc_oxygen, count};
 
     #[test]
     fn test_part_1() {
         let movements = vec![
-            vec![String::from("0"), String::from("1"), String::from("0")],
-            vec![String::from("0"), String::from("1"), String::from("1")],
-            vec![String::from("0"), String::from("0"), String::from("1")],
-            vec![String::from("1"), String::from("1"), String::from("1")],
-            vec![String::from("1"), String::from("0"), String::from("1")],
+            vec!['0', '1', '0'],
+            vec!['0', '1', '1'],
+            vec!['0', '0', '1'],
+            vec!['1', '1', '1'],
+            vec!['1', '0', '1'],
         ];
         // 0 1 1 -> 3
         // 1 0 0 -> 4
@@ -168,11 +166,11 @@ mod tests {
     #[test]
     fn test_part_2() {
         let movements = vec![
-            vec![String::from("0"), String::from("1"), String::from("0")],
-            vec![String::from("0"), String::from("1"), String::from("1")],
-            vec![String::from("0"), String::from("0"), String::from("1")],
-            vec![String::from("1"), String::from("1"), String::from("1")],
-            vec![String::from("1"), String::from("0"), String::from("1")],
+            vec!['0', '1', '0'],
+            vec!['0', '1', '1'],
+            vec!['0', '0', '1'],
+            vec!['1', '1', '1'],
+            vec!['1', '0', '1'],
         ];
         let movs2 = movements.clone();
         // MF 0 1 1 -> 3
