@@ -42,7 +42,7 @@ fn calc_co2(mut char_matrix: Vec<Vec<char>>) -> u32 {
 }
 
 // oxygen -> if equal, return 1
-fn find_most_frequent(char_matrix: &Vec<Vec<char>>, index: usize) -> char {
+fn find_most_frequent(char_matrix: &[Vec<char>], index: usize) -> char {
     let (nbr_of_zeroes, nbr_of_ones) = calc_ones_and_zeroes(char_matrix, index);
     if nbr_of_zeroes > nbr_of_ones {
         '0'
@@ -51,7 +51,7 @@ fn find_most_frequent(char_matrix: &Vec<Vec<char>>, index: usize) -> char {
     }
 }
 // co2 -> if equal, return 0
-fn find_least_frequent(char_matrix: &Vec<Vec<char>>, index: usize) -> char {
+fn find_least_frequent(char_matrix: &[Vec<char>], index: usize) -> char {
     let (nbr_of_zeroes, nbr_of_ones) = calc_ones_and_zeroes(char_matrix, index);
     if nbr_of_zeroes == 0 {
         return '1';
@@ -66,7 +66,7 @@ fn find_least_frequent(char_matrix: &Vec<Vec<char>>, index: usize) -> char {
     }
 }
 
-fn calc_ones_and_zeroes(char_matrix: &Vec<Vec<char>>, index: usize) -> (usize, usize) {
+fn calc_ones_and_zeroes(char_matrix: &[Vec<char>], index: usize) -> (usize, usize) {
     let nbr_of_zeroes = char_matrix
         .iter()
         .filter(|row| row.get(index).unwrap() == &'0')
@@ -124,20 +124,18 @@ fn count(movements: Vec<Vec<char>>) -> u32 {
 }
 
 fn binary_chars_to_decimal(chars: &[char]) -> u32 {
-    binary_to_decimal(chars.into_iter().map(|c| c.to_digit(10).unwrap()).collect())
+    binary_to_decimal(chars.iter().map(|c| c.to_digit(10).unwrap()).collect())
 }
 
 fn binary_to_decimal(chars: Vec<u32>) -> u32 {
     let mut result = 0;
 
-    let mut radix = 0;
     let base: u32 = 2;
-    for digit in chars.iter().rev() {
-        result += digit * base.pow(radix);
-        radix += 1;
+    for (radix, nbr) in chars.iter().rev().enumerate() {
+        result += nbr * base.pow(radix as u32);
     }
 
-    result.into()
+    result
 }
 
 fn line_to_chars(line: String) -> Vec<char> {
