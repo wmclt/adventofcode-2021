@@ -132,8 +132,7 @@ fn binary_to_decimal(chars: &[char]) -> u32 {
         chars
             .iter()
             .map(|c| c.to_string())
-            .collect::<Vec<String>>()
-            .join("")
+            .collect::<String>()
             .as_str(),
         2,
     )
