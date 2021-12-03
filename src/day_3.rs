@@ -1,4 +1,4 @@
-use std::vec::Vec;
+use std::{panic, vec::Vec};
 
 use crate::util::read_data;
 
@@ -43,15 +43,11 @@ fn calc_co2(mut char_matrix: Vec<Vec<char>>) -> u32 {
 
 // oxygen -> if equal, return 1
 fn find_most_frequent(char_matrix: &[Vec<char>], index: usize) -> char {
-    match calc_ones_and_zeroes(char_matrix, index) {
-        (0, _) => '1',
-        (_, 0) => '0',
-        (nbr_of_zeroes, nbr_of_ones) => {
-            if nbr_of_zeroes > nbr_of_ones {
-                '0'
-            } else {
-                '1'
-            }
+    match find_least_frequent(char_matrix, index) {
+        '0' => '1',
+        '1' => '0',
+        _ => {
+            panic!()
         }
     }
 }
